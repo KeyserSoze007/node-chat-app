@@ -47,7 +47,7 @@ describe('Users', () => {
 
     it('should find user names', () => {
         var userName = users.getUser('2');
-        expect(userName).toEqual('Jen');
+        expect(userName.name).toEqual('Jen');
     });
 
     it('should not find user names', () => {

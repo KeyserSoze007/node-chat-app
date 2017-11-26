@@ -39,13 +39,19 @@ io.on('connection', (socket) => {
 });
 
     socket.on('createChat', (chat,callback) => {
-        console.log('new chat:', chat);
-        io.emit('newChat', generateMessage(chat.from, chat.text));
+        var user= users.getUser(socket.id);
+
+        if(user && isRealString(chat.text)){
+            io.to(user.room).emit('newChat', generateMessage(user.name, chat.text));
+        }
         callback();
     });
 
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin',coords.longitude,coords.latitude));
+        var user=users.getUser(socket.id);
+        if(user){
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name,coords.longitude,coords.latitude));
+        }
     });
 
     socket.on('disconnect', () => {
